@@ -1,0 +1,131 @@
+<form role="form">
+    <div class="card-body card-padding">
+        <ul class="tab-nav tn-justified tn-icon" role="tablist" tabindex="1" style="overflow: hidden; outline: none;">
+            <li role="presentation" class="active" [ngClass]="tab1">
+                <a class="col-sx-6" href="#tab-consultation-form-1" aria-controls="tab-1" role="tab" data-toggle="tab" aria-expanded="false" (click)="selectTab()">
+                    <i class="md md-insert-comment icon-tab"></i>
+                    <span class="hidden-xs">Ingresar datos de la consulta</span>
+                </a>
+            </li>
+            <li role="presentation" id="tab2">
+                <a class="col-xs-6" href="#tab-consultation-form-2" aria-controls="tab-2" role="tab" data-toggle="tab" aria-expanded="true" (click)="selectTab()">
+                    <i class="md md-event-note icon-tab"></i>
+                    <span class="hidden-xs">Consultas anteriores</span>
+                </a>
+            </li>
+        </ul>
+
+        <div class="tab-content p-20">
+            <div role="tabpanel" class="tab-pane animated fadeIn active" id="tab-consultation-form-1">
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="input-group form-group">
+                            <span class="input-group-addon"><i class="md md-border-color"></i></span>
+
+                            <div class="fg-line">
+                                <textarea type="text" class="form-control" placeholder="Procedimientos" [(ngModel)]="consultation.Procedures" [ngModelOptions]="{standalone: true}" (keyup.enter)="save()" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="input-group form-group">
+                            <span class="input-group-addon"><i class="md md-format-list-numbered"></i></span>
+
+                            <div class="fg-line">
+                                <textarea type="text" class="form-control" placeholder="Indicaciones" [(ngModel)]="consultation.Prescriptions" [ngModelOptions]="{standalone: true}" (keyup.enter)="save()" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="input-group form-group">
+                            <span class="input-group-addon"><i class="md md-mode-comment"></i></span>
+
+                            <div class="fg-line">
+                                <textarea type="text" class="form-control" placeholder="Observaciones" [(ngModel)]="consultation.Observations" [ngModelOptions]="{standalone: true}" (keyup.enter)="save()" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--div class="row">
+                    <div class="col-sm-4">
+                        <div class="input-group form-group">
+                            <span class="input-group-addon"><i class="md md-attach-money"></i></span>
+                            <div class="fg-line">
+                                <input type="text" class="form-control" placeholder="Monto abonado" [(ngModel)]="consultation.Payment" [ngModelOptions]="{standalone: true}" (keyup.enter)="save()">
+                            </div>
+                        </div>
+                    </div>
+                </div-->
+                <br /><br />
+
+                <button type="submit" class="btn btn-primary btn-sm m-t-10" (click)="save()" data-dismiss="modal">Guardar</button>
+                <button type="submit" class="btn btn-default btn-sm m-t-10" data-dismiss="modal">Cancelar</button>
+            </div>
+
+            <div role="tabpanel" class="tab-pane animated fadeIn" id="tab-consultation-form-2">
+                <div class="text-center" [hidden]="response.Total > 0">
+                    <i class="md md-settings-ethernet" style="font-size: 100px;"></i>
+                    <div>No hay elementos para mostrar</div>
+                </div>
+
+                <div class="card-header">
+                    <h2>{{subtitle}}<small>{{description_subtitle}}</small></h2>
+                </div>
+
+                <div class="table-responsive" [hidden]="response.Total == 0">
+                    <table class="table table-striped" [mfData]="response.Data" #mf="mfDataTable" [mfRowsOnPage]="5">
+                        <thead>
+                            <tr>
+                                <th style="width: 28%">
+                                    <mfDefaultSorter by="name">Procedimientos</mfDefaultSorter>
+                                </th>
+                                <th style="width: 28%">
+                                    <mfDefaultSorter by="name">Indicaciones</mfDefaultSorter>
+                                </th>
+                                <th style="width: 18%">
+                                    <mfDefaultSorter by="name">Observaciones</mfDefaultSorter>
+                                </th>
+                                <!--th style="width: 5%">
+                                    <mfDefaultSorter by="name">Abonado</mfDefaultSorter>
+                                </th-->
+                                <th style="width: 16%">
+                                    <mfDefaultSorter by="name">Fecha</mfDefaultSorter>
+                                </th>
+                                <th style="width: 5%">
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of mf.data">
+                                <td style="width: 28%">{{item.Procedures}}</td>
+                                <td style="width: 28%">{{item.Prescriptions}}</td>
+                                <td style="width: 18%">{{item.Observations}}</td>
+                                <!--td style="width: 5%">{{item.Payment}}</td-->
+                                <td style="width: 16%">{{item.DateExecute | date:'dd-MM-yyyy'}}</td>
+                                <td style="width: 5%">
+                                    <a href="#tab-consultation-form-1" (click)="updateConsultation(item)" aria-controls="tab-1" role="tab" data-toggle="tab" aria-expanded="true">
+                                        <i class="md md-edit"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="4">
+                                    <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25]"></mfBootstrapPaginator>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

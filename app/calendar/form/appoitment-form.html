@@ -1,0 +1,90 @@
+<spinner-content [isRunning]="isRequesting"></spinner-content>
+<div id="modal-cappoitment" class="container" [hidden]="isRequesting">
+    <spinner-content [isRunning]="isRequesting"></spinner-content>
+    <div class="card" [hidden]="isRequesting">
+        <form role="form" #fappoitment="ngForm" novalidate  (ngSubmit)="save()">
+            <div class="card-header">
+                <h2>
+                    {{sub_title}}
+                    <small>
+                    {{sub_title_description}}
+                    </small>
+                </h2>
+            </div>
+            <div class="card-body card-padding">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="input-group form-group {{ (patientid.valid || (patientid.pristine && !fappoitment.submitted)) ? '' : 'has-error has-feedback' }}">
+                            <span class="input-group-addon"><i class="md md-person"></i></span>
+                            <input id="patientId" class="form-control" type="text" list="text_editors" placeholder="Seleccione el paciente o adicionelo si es nuevo" [(ngModel)]="appoitment.PatientName" [ngModelOptions]="{standalone: true}"
+                                   name="patientid" #patientid="ngModel" required/>
+                            <datalist id="text_editors">
+                                <option *ngFor="let opt of allPatients" data-id="{{opt.patient.Id}}" (click)="selectOption(opt.patient.Id)">{{opt.LastNames}} {{opt.Name}}</option>
+                            </datalist>
+                            <span class="input-group-addon"><a [routerLink]="['/patiens', -1]"><i class="md md-person-add"></i></a></span>
+                            <span class="md md-close form-control-feedback {{ (patientid.valid || (patientid.pristine && !fappoitment.submitted)) ? 'hidden' : '' }}"></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="input-group form-group {{ (EmployeeId.valid || (EmployeeId.pristine && !fappoitment.submitted)) ? '' : 'has-error has-feedback' }}">
+                            <span class="input-group-addon"><i class="md md-school"></i></span>
+                            <div class="fg-line select">
+                                <select class="form-control" [(ngModel)]="appoitment.EmployeeId" data-live-search="true" name="EmployeeId"  #EmployeeId="ngModel" required>
+                                    <option value="-1">Seleccione el profesional que lo atender&aacute;</option>
+                                    <option *ngFor="let opt of allEmployees" [value]="opt.EmployeeId">{{opt.Name}} {{opt.LastNames}} - {{opt.especiality.Name}}</option>
+                                </select>
+                            </div>
+                            <span class="md md-close form-control-feedback {{ (EmployeeId.valid || (EmployeeId.pristine && !fappoitment.submitted)) ? 'hidden' : '' }}"></span>
+                        </div>
+                    </div>
+                </div>               
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="input-group form-group {{ (StartDate.valid || (StartDate.pristine && !fappoitment.submitted)) ? '' : 'has-error has-feedback' }}">
+                            <span class="input-group-addon"><i class="md md-event"></i></span>
+                            <div class="dtp-container dropdown fg-line">
+                                <input id="StartDate" type='text' class="form-control date-picker" data-toggle="dropdown" placeholder="Fecha de la cita" [(ngModel)]="appoitment.StartDate" name="StartDate" #StartDate="ngModel" required>
+                            </div>
+                            <span class="md md-close form-control-feedback {{ (StartDate.valid || (StartDate.pristine && !fappoitment.submitted)) ? 'hidden' : '' }}"></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="input-group form-group {{ (Hour.valid || (Hour.pristine && !fappoitment.submitted)) ? '' : 'has-error has-feedback' }}">
+                            <span class="input-group-addon"><i class="md md-access-time"></i></span>
+                            <div class="dtp-container dropdown fg-line">
+                                <input id="EndDate" type='text' class="form-control time-picker" data-toggle="dropdown" placeholder="Hora de la cita" [(ngModel)]="appoitment.Hour" name="Hour" #Hour="ngModel">
+                            </div>
+                            <span class="md md-close form-control-feedback {{ (Hour.valid || (Hour.pristine && !fappoitment.submitted)) ? 'hidden' : '' }}"></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="input-group form-group {{ (Duration.valid || (Duration.pristine && !fappoitment.submitted)) ? '' : 'has-error has-feedback' }}">
+                            <span class="input-group-addon"><i class="md md-watch"></i></span>
+                            <div class="dtp-container dropdown fg-line">
+                                <input type='text' class="form-control" placeholder="Duraci&oacute;n de la cita en minutos" [(ngModel)]="appoitment.Duration" name="Duration" (keyup.enter)="save()"  #Duration="ngModel" required>
+                            </div>
+                            <span class="md md-close form-control-feedback {{ (Duration.valid || (Duration.pristine && !fappoitment.submitted)) ? 'hidden' : '' }}"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="eventName">Estado de la cita</label>
+                    <div class="event-tag">
+                        <span data-tag="bgm-red" class="bgm-red" [class.selected]="appoitment.ClassName == 'bgm-red'" (click)="selectTagColor('bgm-red')" title="Planificado"></span>
+                        <span data-tag="bgm-orange" class="bgm-orange" [class.selected]="appoitment.ClassName == 'bgm-orange'" (click)="selectTagColor('bgm-orange')" title="Agendado"></span>
+                        <span data-tag="bgm-green" class="bgm-green" [class.selected]="appoitment.ClassName == 'bgm-green'" (click)="selectTagColor('bgm-green')" title="Confirmado"></span>
+                        <span data-tag="bgm-black" class="bgm-black" [class.selected]="appoitment.ClassName == 'bgm-black'" (click)="selectTagColor('bgm-black')" title="Cancelado"></span>
+                        <span data-tag="bgm-gray" class="bgm-gray" [class.selected]="appoitment.ClassName == 'bgm-gray'" (click)="selectTagColor('bgm-gray')" title="No Asisti&oacute;"></span>
+                    </div>
+                </div>
+                <br />
+                <button id="addEvent" type="submit" class="btn btn-primary btn-sm m-t-10" data-dismiss="modal">Agendar</button>
+                <button type="submit" class="btn btn-default btn-sm m-t-10" data-dismiss="modal" (click)="cancel()">Cancelar</button>
+                <button class="btn btn-danger btn-sm m-t-10 pull-right" data-dismiss="modal" (click)="delete()">Eliminar</button>
+            </div>
+            <br />
+        </form>
+    </div>
+</div>
+
+

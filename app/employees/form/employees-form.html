@@ -1,0 +1,118 @@
+<spinner-content [isRunning]="isRequesting"></spinner-content>
+<div class="container" [hidden]="isRequesting">
+ 
+    <spinner-content [isRunning]="isRequesting"></spinner-content>
+
+    <div class="card" [hidden]="isRequesting">
+        <form role="form">
+            <div class="card-header">
+                <h2>
+                    {{sub_title}}
+                    <small>
+                        {{sub_title_description}}
+                    </small>
+                </h2>
+            </div>
+            <div class="card-body card-padding">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="input-group form-group">
+                            <span class="input-group-addon"><i class="md md-person"></i></span>
+                            <div class="fg-line select">
+                                <select class="form-control tag-select" [(ngModel)]="employee.EmployeeId" data-live-search="true" name="EmployeeId" [disabled]="newPerson">
+                                    <option value="-1">Seleccione el empleado o adicionelo si no est&aacute; registrado</option>
+                                    <option *ngFor="let opt of allEmployees" [value]="opt.EmployeeId">{{opt.person.Name}} {{opt.person.LastNames}}</option>
+                                </select>
+                            </div>
+                            <span class="input-group-addon"><a (click)="addPerson()"><i class="md md-person-add"></i></a></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="input-group form-group">
+                            <span class="input-group-addon"><i class="md md-school"></i></span>
+                            <div class="fg-line select">
+                                <select class="form-control" [(ngModel)]="employee.JobId" name="JobId" (keyup.enter)="save()">
+                                    <option value="-1">Seleccione la especialidad</option>
+                                    <option *ngFor="let opt of jobs" [value]="opt.Id">{{opt.Name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" [hidden]="!newPerson">
+                    <div class="col-sm-6">
+                        <div class="input-group form-group fg-float">
+                            <span class="input-group-addon"><i class="md md-person"></i></span>
+                            <div class="fg-line">
+                                <input type="text" class="form-control" [(ngModel)]="user.Name" name="Name" (keyup.enter)="save()">
+                            </div>
+                            <label class="fg-label padding-left-40" [hidden]="user.Name">Nombre</label>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="input-group form-group fg-float">
+                            <span class="input-group-addon"><i class="md md-account-child"></i></span>
+                            <div class="fg-line">
+                                <input type="text" class="form-control" [(ngModel)]="user.LastNames" name="LastName" (keyup.enter)="save()">
+                            </div>
+                            <label class="fg-label padding-left-40" [hidden]="user.LastNames">Apellidos</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" [hidden]="!newPerson">
+                    <div class="col-sm-6">
+                        <div class="input-group form-group fg-float">
+                            <span class="input-group-addon"><i class="md md-email"></i></span>
+                            <div class="fg-line">
+                                <input type="text" class="form-control" [(ngModel)]="user.Email" name="Email" (keyup.enter)="save()">
+                            </div>
+                            <label class="fg-label padding-left-40" [hidden]="user.Email">Correo electr&oacute;nico</label>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="input-group form-group fg-float">
+                            <span class="input-group-addon"><i class="md md-accessibility"></i></span>
+                            <div class="fg-line">
+                                <input type="password" class="form-control" [(ngModel)]="user.Password" name="Password" (keyup.enter)="save()">
+                            </div>
+                            <label class="fg-label padding-left-40" [hidden]="user.Password">Contrase&ntilde;a</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="input-group form-group fg-float">
+                            <span class="input-group-addon"><i class="md md-attach-money"></i></span>
+                            <div class="fg-line">
+                                <input type="text" class="form-control" [(ngModel)]="employee.Salary" name="Salary" (keyup.enter)="save()">
+                            </div>
+                            <label class="fg-label padding-left-40" [hidden]="employee.Salary">Salario</label>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="input-group form-group fg-float">
+                            <span class="input-group-addon"><i class="md md-bookmark"></i></span>
+                            <div class="fg-line">
+                                <input type="text" class="form-control" [(ngModel)]="employee.PercentOfWork" name="PercentOfWork" (keyup.enter)="save()">
+                            </div>
+                            <label class="fg-label padding-left-40" [hidden]="employee.PercentOfWork">% de comisi&oacute;n</label>
+                        </div>
+                    </div>
+                </div>
+
+                <br /><br />
+                <button type="submit" class="btn btn-primary btn-sm m-t-10" (click)="save()">Guardar</button>
+                <button type="submit" class="btn btn-default btn-sm m-t-10" (click)="cancel()">Cancelar</button>
+            </div>
+            <br />
+        </form>
+    </div>
+
+
+</div>

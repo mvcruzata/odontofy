@@ -1,0 +1,71 @@
+<spinner-content [isRunning]="isRequesting"></spinner-content>
+
+<div class="container" [hidden]="isRequesting">   
+    <div class="card">
+        <div class="card-header">
+            <h2>
+                {{subtitle}}<small>{{description_subtitle}}</small>
+            </h2>
+            <ul class="actions">
+                <li>
+                    <a [routerLink]="['/employees', -1]">
+                        <i class="md md-add"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="text-center" [hidden]="response.Total > 0">
+            <i class="md md-settings-ethernet" style="font-size: 100px;"></i>
+            <div>No hay elementos para mostrar</div>
+        </div>
+
+        <div class="table-responsive"  [hidden]="!(response.Total > 0)">
+            <table class="table table-striped" [mfData]="response.Data" #mf="mfDataTable" [mfRowsOnPage]="10">
+                <thead>
+                    <tr>
+                        <th style="width: 70%">
+                            <mfDefaultSorter by="name">Nombres</mfDefaultSorter>
+                        </th>
+                        <th style="width: 25%">
+                            <mfDefaultSorter by="email">Rol</mfDefaultSorter>
+                        </th>
+                        <th style="width: 5%">
+                            <mfDefaultSorter by="city"></mfDefaultSorter>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of mf.data">
+                        <td style="width: 70%">{{item.Name}} {{item.LastNames}}</td>
+                        <td style="width: 25%">{{item.especiality.Name}}</td>
+                        <td style="width: 5%">
+                            <ul class="actions">
+                                <li class="dropdown">
+                                    <a href="" data-toggle="dropdown">
+                                        <i class="md md-more-vert"></i>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-right">
+                                        <li>
+                                            <a [routerLink]="['/employees', item.Id]">Editar</a>
+                                        </li>
+                                        <li>
+                                            <button type="button" class="btn btn-link pull-right" (click)="delete(item.Id)" data-dismiss="modal">Eliminar</button>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4">
+                            <mfBootstrapPaginator [rowsOnPageSet]="[10,25,50]"></mfBootstrapPaginator>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,104 @@
+<spinner-content [isRunning]="isRequesting"></spinner-content>
+<div class="container" [hidden]="isRequesting">
+    <div class="block-header">
+        <h2>{{title}}</h2>
+
+        <ul class="actions">
+            <li>
+                <a href="" (click)="goBack()">
+                    <i class="md md-undo"></i>
+                </a>
+            </li>
+            <li>
+                <a [routerLink]="['/diagnosis-plan-form', -1]">
+                    <i class="md md-add"></i>
+                </a>
+            </li>
+            <li class="dropdown">
+                <a href="" data-toggle="dropdown">
+                    <i class="md md-more-vert"></i>
+                </a>
+
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li>
+                        <a id="menu-calendar" [routerLink]="['/calendar']"><i class="md md-today"></i> Agenda</a>
+                    </li>
+                    <li>
+                        <a id="data-personal" class="menu-table" [routerLink]="['/data-personal']"><i class="md md-account-child"></i>Pacientes</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="text-center" [hidden]="response.Total > 0">
+        <i class="md md-settings-ethernet" style="font-size: 100px;"></i>
+        <div>No hay elementos para mostrar</div>
+    </div>
+
+    <div class="card" [hidden]="!(response.Total > 0)">
+        <div class="card-header">
+            <h2>{{subtitle}}<small>{{description_subtitle}}</small></h2>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped" [mfData]="response.Data" #mf="mfDataTable" [mfRowsOnPage]="5">
+                <thead>
+                    <tr>
+                        <th style="width: 80%">
+                            <mfDefaultSorter by="name">Tratamiento</mfDefaultSorter>
+                        </th>
+                        <!--th style="width: 10%" class="text-center">
+                            <mfDefaultSorter by="age">Price</mfDefaultSorter>
+                        </th-->
+                        <th style="width: 15%" class="text-center">
+                            <mfDefaultSorter by="age">Estado</mfDefaultSorter>
+                        </th>
+                        <th style="width: 5%">
+                            <mfDefaultSorter by="city">Acciones</mfDefaultSorter>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of mf.data">
+                        <td (click)="details(item)">{{item.Name}}</td>
+                        <!--td class="text-center">{{item.Price}}</td-->
+                        <td class="text-center">{{item.Status}}</td>
+                        <td>
+
+                            <ul class="actions">
+                                <li class="dropdown">
+                                    <a href="" data-toggle="dropdown">
+                                        <i class="md md-more-vert"></i>
+                                    </a>
+
+                                    <ul class="dropdown-menu dropdown-menu-right">
+                                        <li>
+                                            <a [routerLink]="['/diagnosis-plan-form', item.Id]">Editar</a>
+                                        </li>
+                                        <li>
+                                            <a [routerLink]="['/diagnosis-plan-form', item.Id]">Observar</a>
+                                        </li>
+                                        <!--<li>
+                                            <a [routerLink]="['/diagnosis-plan-form', item.Id]">Paid</a>
+                                        </li>-->
+                                        <li>
+                                            <a [routerLink]="['/diagnosis-plan-form', item.Id]">Cancelar</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4">
+                            <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25]"></mfBootstrapPaginator>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>

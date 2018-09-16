@@ -1,0 +1,182 @@
+﻿<html !DOCTYPE>
+<!--[if IE 9 ]>
+<html class="ie9"><![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <title>OdontoFy</title>
+
+    <!-- Vendor CSS -->
+    <link rel="stylesheet" type="text/css" href="node_modules/primeui/themes/omega/theme.css" />
+    <!--link rel="stylesheet" type="text/css" href="YOUR_PATH/font-awesome.min.css" /-->
+    <link rel="stylesheet" type="text/css" href="node_modules/primeui/primeui-ng-all.min.css" />
+    <link href="vendors/fullcalendar/fullcalendar.css" rel="stylesheet">
+    <link href="vendors/animate-css/animate.min.css" rel="stylesheet">
+    <link href="vendors/sweet-alert/sweet-alert.min.css" rel="stylesheet">
+    <link href="vendors/bootstrap-select/bootstrap-select.min.css" rel="stylesheet">
+    <!-- Vendor CSS -->
+    <link href="vendors/bootgrid/jquery.bootgrid.min.css" rel="stylesheet">
+  
+
+
+    <!-- 1. Load libraries -->
+    <!-- Polyfill(s) for older browsers -->
+    <script src="node_modules/core-js/client/shim.min.js"></script>
+    <script src="node_modules/zone.js/dist/zone.js"></script>
+    <script src="node_modules/reflect-metadata/Reflect.js"></script>
+    <script src="node_modules/systemjs/dist/system.src.js"></script>
+    <script src="node_modules/angular2-calendar/angular2-calendar.js"></script>
+    <!-- 2. Configure SystemJS -->
+    <script src="systemjs.config.js"></script>
+    <script>
+        System.import('app').catch(function (err) { console.error(err); });
+    </script>
+
+    <!-- CSS -->
+    <link href="css/app.css" rel="stylesheet">
+
+    <base href="/">
+
+    <style>
+        .spinner {
+            width: 50px;
+            height: 50px;
+            position: relative;
+            margin: 20% auto 100% auto;
+        }
+
+        .double-bounce1, .double-bounce2 {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background-color: #4285F4;
+            opacity: 0.6;
+            position: absolute;
+            top: 0;
+            left: 0;
+            -webkit-animation: sk-bounce 2.0s infinite ease-in-out;
+            animation: sk-bounce 2.0s infinite ease-in-out;
+        }
+
+        .double-bounce2 {
+            -webkit-animation-delay: -1.0s;
+            animation-delay: -1.0s;
+        }
+
+        @-webkit-keyframes sk-bounce {
+            0%, 100% {
+                -webkit-transform: scale(0.0)
+            }
+
+            50% {
+                -webkit-transform: scale(1.0)
+            }
+        }
+
+        @keyframes sk-bounce {
+            0%, 100% {
+                transform: scale(0.0);
+                -webkit-transform: scale(0.0);
+            }
+
+            50% {
+                transform: scale(1.0);
+                -webkit-transform: scale(1.0);
+            }
+        }
+    </style>
+
+</head>
+<body>
+    <div id="index-spinner">
+        <div style="font-size:20px;" class="alert alert-success col-sm-5 col-lg-offset-4" role="alert">Bienvenidos a la plataforma de gesti&oacute;n de su cl&iacute;nica</div>
+        <br />
+        <div class="spinner">
+            <div class="double-bounce1"></div>
+            <div class="double-bounce2"></div>
+        </div>
+    </div>
+
+    <my-app></my-app>
+
+
+    <!-- Older IE warning message -->
+    <!--[if lt IE 9]>
+    <div class="ie-warning">
+      <h1 class="c-white">IE SUCKS!</h1>
+
+      <p>You are using an outdated version of Internet Explorer, upgrade to any of the following web browser <br/>in order
+        to access the maximum functionality of this website. </p>
+      <ul class="iew-download">
+        <li>
+          <a href="http://www.google.com/chrome/">
+            <img src="img/browsers/chrome.png" alt="">
+
+            <div>Chrome</div>
+          </a>
+        </li>
+        <li>
+          <a href="https://www.mozilla.org/en-US/firefox/new/">
+            <img src="img/browsers/firefox.png" alt="">
+
+            <div>Firefox</div>
+          </a>
+        </li>
+        <li>
+          <a href="http://www.opera.com">
+            <img src="img/browsers/opera.png" alt="">
+
+            <div>Opera</div>
+          </a>
+        </li>
+        <li>
+          <a href="https://www.apple.com/safari/">
+            <img src="img/browsers/safari.png" alt="">
+
+            <div>Safari</div>
+          </a>
+        </li>
+        <li>
+          <a href="http://windows.microsoft.com/en-us/internet-explorer/download-ie">
+            <img src="img/browsers/ie.png" alt="">
+
+            <div>IE (New)</div>
+          </a>
+        </li>
+      </ul>
+      <p>Upgrade your browser for a Safer and Faster web experience. <br/>Thank you for your patience...</p>
+    </div>
+    <![endif]-->
+    <!-- Javascript Libraries -->
+    <script src="js/jquery-2.1.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+
+    <script src="vendors/flot/jquery.flot.min.js"></script>
+    <script src="vendors/flot/jquery.flot.resize.min.js"></script>
+    <script src="vendors/flot/plugins/curvedLines.js"></script>
+    <script src="vendors/flot/jquery.flot.orderBar.js"></script>
+    <script src="vendors/sparklines/jquery.sparkline.min.js"></script>
+    
+    <script src="vendors/fullcalendar/lib/moment.min.js"></script>
+    <script src="vendors/fullcalendar/fullcalendar.min.js"></script>
+    <script src="vendors/simpleWeather/jquery.simpleWeather.min.js"></script>
+    <script src="vendors/auto-size/jquery.autosize.min.js"></script>
+    <script src="vendors/nicescroll/jquery.nicescroll.min.js"></script>
+    <script src="vendors/waves/waves.min.js"></script>
+    <script src="vendors/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+    <script src="vendors/bootstrap-growl/bootstrap-growl.min.js"></script>
+    <script src="vendors/sweet-alert/sweet-alert.min.js"></script>
+    <script src="vendors/bootgrid/jquery.bootgrid.min.js"></script>
+    <script src="vendors/moment/moment.min.js"></script>
+    <script src="vendors/bootstrap-select/bootstrap-select.min.js"></script>
+    
+    <script src="js/functions.js"></script>
+
+</body>
+</html>

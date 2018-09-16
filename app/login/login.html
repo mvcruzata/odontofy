@@ -1,0 +1,239 @@
+<div class="login-content text-center">
+  <div id="logoApp" class="text-center">
+    <h1 class="f-300 p-r-20" style="padding-right:50px;">
+      <img alt="" src="img/logoApp.png">
+    </h1>
+  </div>
+  <!-- Login -->
+  <div class="lc-block" id="l-login" [ngClass]="loginToggled">
+    <div class="input-group m-b-20">
+      <span class="input-group-addon">
+        <i class="md md-email"></i>
+      </span>
+      <div class="fg-line">
+        <input type="text" class="form-control" placeholder="Correo elect&oacute;nico" [(ngModel)]="user.Email">
+      </div>
+    </div>
+
+    <div class="input-group m-b-20">
+      <span class="input-group-addon">
+        <i class="md md-accessibility"></i>
+      </span>
+      <div class="fg-line">
+        <input type="password" class="form-control" placeholder="Contrase&ntilde;a" [(ngModel)]="user.Password" (keyup.enter)="login()">
+      </div>
+    </div>
+
+    <div class="checkbox">
+      <label>
+        <input type="checkbox" [(ngModel)]="user.KeepConnected">
+        <i class="input-helper"></i>
+        Mant&eacute;nme conectado
+      </label>
+    </div>
+
+    <div class="loginItemLeft">
+      <a data-block="#l-forget-password" (click)="showBlock('forget-password')">
+        Recuperar contrase&ntilde;a
+      </a>
+    </div>
+    <div class="loginItemRight">
+      ¿No tienes cuenta?
+      <a data-block="#l-register" (click)="showBlock('register')">
+        Regístrate
+      </a>
+    </div>
+    <div class="loginButton">
+      <button class="btn bgm-teal" (click)="login()">
+        Entrar
+      </button>
+    </div>
+  </div>
+
+  <!-- Register -->
+  <div class="lc-block" id="l-register" [ngClass]="registerToggled">
+    <div class="input-group m-b-20">
+      <span class="input-group-addon">
+        <i class="md md-person"></i>
+      </span>
+      <div class="fg-line">
+        <input type="text" class="form-control" placeholder="Nombre" [(ngModel)]="user.Name">
+      </div>
+    </div>
+
+    <div class="input-group m-b-20">
+      <span class="input-group-addon">
+        <i class="md md-account-child"></i>
+      </span>
+      <div class="fg-line">
+        <input type="text" class="form-control" placeholder="Apellidos" [(ngModel)]="user.LastNames">
+      </div>
+    </div>
+
+    <div class="input-group m-b-20">
+      <span class="input-group-addon">
+        <i class="md md-mail"></i>
+      </span>
+      <div class="fg-line">
+        <input type="text" class="form-control" placeholder="Correo elect&oacute;nico" [(ngModel)]="user.Email">
+      </div>
+    </div>
+
+    <div class="input-group m-b-20">
+      <span class="input-group-addon">
+        <i class="md md-accessibility"></i>
+      </span>
+      <div class="fg-line">
+        <input type="password" class="form-control" placeholder="Contrase&ntilde;a" [(ngModel)]="user.Password">
+      </div>
+    </div>
+
+    <div class="checkbox">
+      <label>
+        <input type="checkbox" [(ngModel)]="user.ImProfesional">
+        <i class="input-helper"></i>
+        Soy un profesional
+      </label>
+    </div>
+
+    <div class="checkbox">
+      <label>
+        <input type="checkbox" [(ngModel)]="user.IHaveClinic">
+        <i class="input-helper"></i>
+        Tengo una cl&iacute;nica
+      </label>
+    </div>
+
+    <div class="loginItemLeft">
+      <a data-block="#l-forget-password" (click)="showBlock('forget-password')">
+        Recuperar contrase&ntilde;a
+      </a>
+    </div>
+
+    <!--div class="row" [hidden]="!user.IHaveClinic">
+          <div class="input-group m-b-20 p-t-20">
+            <span class="input-group-addon">
+              <i class="md md-school"></i>
+            </span>
+            <div class="fg-line">
+              <div class="fg-line select">
+                <select class="form-control" [(ngModel)]="user.ClinicSpecialtyId" name="clinicSpecialty" #paymentPlan="ngModel" required>
+                  <option value="-1">Seleccione su tipo de cl&iacute;nica</option>
+                  <option *ngFor="let opt of clinicsTypes" [value]="opt.Id">{{opt.Name}}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div-->
+    <div class="loginItemRight">
+      ¿Ya tienes cuenta?
+      <a data-block="#l-login" (click)="showBlock('login')">
+        Entrar
+      </a>
+    </div>
+
+    <div class="checkbox">
+      <label>
+        <!--input type="checkbox" [(ngModel)]="user.LicenseAgreement" (keyup.enter)="register()">
+                <i class="input-helper"></i-->
+        <span>Al crear aceptas los </span>
+        <a href="http://odontofy.com/terms-and-conditions-of-use" target="_blank"> t&eacute;rminos y condiciones de uso</a>
+      </label>
+    </div>
+
+    <div class="loginButton">
+      <button class="btn bgm-teal" (click)="register()">
+        Crear
+      </button>
+    </div>
+  </div>
+
+  <!-- Forgot Password -->
+  <div class="lc-block" id="l-forget-password" [ngClass]="forgetPasswordToggled">
+    <div [hidden]="isSendEmail">
+      <p class="text-left">Ingrese su correo para recuperar la contrase&ntilde;a</p>
+
+      <div class="input-group m-b-20">
+        <span class="input-group-addon">
+          <i class="md md-email"></i>
+        </span>
+        <div class="fg-line">
+          <input type="text" class="form-control" placeholder="Correo electr&oacute;nico" [(ngModel)]="user.Email" (keyup.enter)="forgetPassword()">
+        </div>
+      </div>
+    </div>
+
+    <div [hidden]="!isSendEmail">
+      <p class="text-left">Se ha enviado un enlace a su correo para recuperar su contrase&ntilde;a</p>
+    </div>
+
+    <div class="loginItemLeft">
+      ¿No tienes cuenta?
+      <a data-block="#l-register" (click)="showBlock('register')">
+        Regístrate
+      </a>
+    </div>
+    <div class="loginItemRight">
+      ¿Ya tienes cuenta?
+      <a data-block="#l-login" (click)="showBlock('login')">
+        Entrar
+      </a>
+    </div>
+
+    <div class="loginButton">
+      <button class="btn bgm-teal" (click)="forgetPassword()">
+        Enviar
+      </button>
+    </div>
+  </div>
+
+  <!-- Forgot Password -->
+  <div class="lc-block" id="l-change-password" [ngClass]="changePasswordToggled">
+    <p class="text-left">Ingrese la nueva contrase&ntilde;a</p>
+    <div class="input-group m-b-20">
+      <span class="input-group-addon">
+        <i class="md md-accessibility"></i>
+      </span>
+      <div class="fg-line">
+        <input type="password" class="form-control" placeholder="Contrase&ntilde;a" [(ngModel)]="changePass.Password" name="password">
+      </div>
+    </div>
+    <div class="input-group m-b-20">
+      <span class="input-group-addon">
+        <i class="md md-accessibility"></i>
+      </span>
+      <div class="fg-line">
+        <input type="password" class="form-control" placeholder="Repita la contrase&ntilde;a" [(ngModel)]="changePass.ConfirmPassword"
+          name="repeat_password" (keyup.enter)="changeForgetPassword()">
+      </div>
+    </div>
+
+    <div style="text-align: left; margin: 50px 0 50px 0">
+      ¿No tienes cuenta?
+      <a data-block="#l-register" (click)="showBlock('register')">
+        Regístrate
+      </a>
+    </div>
+    <div style="text-align: right; margin: 25px 0">
+      ¿Ya tienes cuenta?
+      <a data-block="#l-login" (click)="showBlock('login')">
+        Entrar
+      </a>
+    </div>
+
+    <div class="loginButton">
+      <button class="btn bgm-teal" (click)="changeForgetPassword()">
+        Enviar
+      </button>
+    </div>
+  </div>
+
+  <!-- Message -->
+  <div [hidden]="!error" class="alert alert-danger alert-dismissible col-sm-4 col-sm-offset-4 m-t-50" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    {{response.Message}}
+  </div>
+
+</div>

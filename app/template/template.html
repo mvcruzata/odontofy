@@ -1,0 +1,206 @@
+<spinner-content [isRunning]="appGlobals.isRequestingGlobal.getValue()"></spinner-content>
+
+<header id="header" [hidden]="!appGlobals.isUserLoggedIn.getValue()">
+    <ul class="header-inner">
+        <li id="menu-trigger" data-trigger="#sidebar">
+            <div class="line-wrap">
+                <div class="line top"></div>
+                <div class="line center"></div>
+                <div class="line bottom"></div>
+            </div>
+        </li>
+        <li class="logo hidden-xs">
+            <a [routerLink]="['/dashboard']">{{appGlobals.clinic.getValue().Name}} <small class="c-lime">iniciado como {{appGlobals.owner.getValue() ? "Admimnistrador" : "Trabajador"}}</small></a>
+        </li>
+        <li class="pull-right">
+            <ul class="top-menu">
+                <li id="toggle-width">
+                    <div class="toggle-switch">
+                        <input id="tw-switch" type="checkbox" hidden="hidden">
+                        <label for="tw-switch" class="ts-helper"></label>
+                    </div>
+                </li>
+
+                <!--<li id="top-search">
+                    <a class="tm-search" href=""></a>
+                </li>-->
+                <li class="dropdown">
+                    <a data-toggle="dropdown" class="tm-notification" href=""><i class="tmn-counts">{{appGlobals.notifications.getValue().Total}}</i></a>
+
+                    <div class="dropdown-menu pull-right dropdown-menu-lg">
+                        <div class="listview">
+                            <div class="lv-header">
+                                Alertas
+                            </div>
+                            <div class="lv-body">
+                                <a class="lv-item" href="" *ngFor="let opt of appGlobals.notifications.getValue().Data">
+                                    <div class="media">
+                                        <div class="media-body">
+                                            <div class="lv-title">{{opt.title}}</div>
+                                            <small class="lv-small" >Cita en: {{opt.cantDays}} dias<!-- , T:{{opt.phone}} M:{{opt.mobile}}--></small>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            <a class="lv-footer" href="" [routerLink]="['/notifications']">Ver todas</a>
+                        </div>
+                    </div>
+                </li>
+                <li class="dropdown">
+                    <a data-toggle="dropdown" class="tm-settings" href=""></a>
+                    <ul class="dropdown-menu dm-icon pull-right">
+                        <li>
+                            <a [routerLink]="['/profile']"><i class="md md-person"></i>Perfil</a>
+                        </li>
+                        <li>
+                            <a [routerLink]="['/appoitments', -1, '!']"><i class="md md-today"></i> Agendar cita</a>
+                        </li>
+                        <li>
+                            <a [routerLink]="['/patiens', -1]"><i class="md md-person-add"></i> Adicionar paciente</a>
+                        </li>
+                        <li [hidden]="!appGlobals.owner.getValue()">
+                            <a [routerLink]="['/treatments', -1]"><i class="md md-add"></i> Adicionar Tratamiento</a>
+                        </li>
+                        <li [hidden]="!appGlobals.owner.getValue()">
+                            <a [routerLink]="['/employees', -1]"><i class="md md-person-add"></i> Adicionar Empleado</a>
+                        </li>
+                        <li>
+                            <a (click)="logout()" [routerLink]="['/login']"><i class="md md-history"></i>Salir</a>
+                        </li>
+                    </ul>
+                </li>
+                <li id="chat-trigger" data-trigger="#chat">
+                    <a class="tm-chat" href=""></a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <!-- Top Search Content -->
+    <div id="top-search-wrap">
+        <input type="text">
+        <i id="top-search-close">&times;</i>
+    </div>
+</header>
+
+<section id="main" [hidden]="!appGlobals.isUserLoggedIn.getValue()">
+    <aside id="sidebar">
+        <div class="sidebar-inner">
+            <div class="si-inner">
+                <div class="profile-menu">
+                    <a href="">
+                        <div class="profile-pic">
+                            <!--<img src="img/logoApp.png" alt="">-->
+                            <div>&nbsp;</div><br /><br />
+                        </div>
+                        <div class="profile-info">
+                            {{appGlobals.userName.getValue()}}
+                            <i class="md md-arrow-drop-down"></i>
+                        </div>
+                    </a>
+                    <ul class="main-menu">
+                        <li>
+                            <a class="form-witget" [routerLink]="['/profile']"><i class="md md-person"></i> Perfil</a>
+                        </li>
+                        <li>
+                            <a (click)="logout()" [routerLink]="['/login']"><i class="md md-history"></i> Salir</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <ul class="main-menu">
+                    <li class="active"><a [routerLink]="['/dashboard']"><i class="md md-home"></i> Inicio</a></li>
+                    <li>
+                        <!--[hidden]="!appGlobals.roleDoctor.getValue()"-->
+                        <a id="menu-calendar" [routerLink]="['/calendar']"><i class="md md-today"></i> Agenda</a>
+                    </li>
+                    <li class="sub-menu">
+                        <a href=""><i class="md md-account-child"></i> Pacientes</a>
+
+                        <ul>
+                            <li><a id="data-personal" class="menu-table" [routerLink]="['/data-personal']">Historias cl&iacute;nicas</a></li>
+                            <li><a id="data-personal" class="menu-table" [routerLink]="['/notifications']">Notificaciones</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="sub-menu" [hidden]="!appGlobals.roleAdmin.getValue()">
+                        <a href=""><i class="md md-attach-money"></i> Reportes</a>
+
+                        <ul>
+                            <li><a class="menu-table" [routerLink]="['/accounting-all', 'all']">Estados de cuentas</a></li>
+                            <li><a class="menu-table" [routerLink]="['/charts/sale']">Ventas</a></li>
+                            <li><a class="menu-table" [routerLink]="['/billing']">Facturas</a></li>
+                            <!--li><a class="menu-table" [routerLink]="['/charts/appoitment']">Citas</a></li>
+                            <li><a class="menu-table" [routerLink]="['/charts/patient']">Pacientes</a></li-->
+                        </ul>
+                    </li>
+
+                    <li class="sub-menu" [hidden]="!appGlobals.roleAdmin.getValue()">
+                        <a href=""><i class="md md-view-list"></i> Configuraci&oacute;n</a>
+
+                        <ul>
+                            <li><a class="menu-table" [routerLink]="['/clinics']">Cl&iacute;nica</a></li>
+                            <li><a class="menu-table" [routerLink]="['/employees']">Empleados</a></li>
+                            <li><a class="menu-table" [routerLink]="['/treatments']">Tratamientos</a></li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a id="refresh" (click)="clearCache()"><i class="md md-refresh"></i> Actualizar versi&oacute;n</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </aside>
+
+    <aside id="chat">
+        <ul class="tab-nav tn-justified" role="tablist">
+            <li role="presentation" class="active"><a href="#clinics" aria-controls="clinics" role="tab" data-toggle="tab">Mis Cl&iacute;nicas</a></li>
+            <li role="presentation"><a href="#online" aria-controls="online" role="tab" data-toggle="tab">Trabajar en:</a></li>
+        </ul>
+
+        <!--div class="chat-search">
+            <div class="fg-line">
+                <input type="text" class="form-control" placeholder="Buscar">
+            </div>
+        </div-->
+
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade in active" id="clinics">
+                <div class="listview">
+                    <a class="lv-item" [routerLink]="['/changeclinic', 'owner',clinic.Id, clinic.Name]" *ngFor="let clinic of appGlobals.clinicsOwners.getValue().Data">
+                        <div class="media">
+                            <div class="pull-left p-relative">
+                                <i class="md md-domain"></i>
+                            </div>
+                            <div class="media-body">
+                                <div class="lv-title">{{clinic.Name}}</div>
+                                <small class="lv-small">{{clinic.Adress}}</small>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="online">
+                <div class="listview">
+                    <a class="lv-item" [routerLink]="['/changeclinic', 'worker', clinic.Id, clinic.Name]" *ngFor="let clinic of appGlobals.clinicsWorkers.getValue().Data">
+                        <div class="media">
+                            <div class="pull-left p-relative">
+                                <i class="md md-domain"></i>
+                            </div>
+                            <div class="media-body">
+                                <div class="lv-title">{{clinic.Name}}</div>
+                                <small class="lv-small">{{clinic.Adress}}</small>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <section id="content">
+        <router-outlet></router-outlet>
+    </section>
+</section>
+
+<login [hidden]="appGlobals.isUserLoggedIn.getValue() || appGlobals.isRequestingGlobal.getValue()"></login>

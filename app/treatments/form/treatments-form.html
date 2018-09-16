@@ -1,0 +1,83 @@
+<spinner-content [isRunning]="isRequesting"></spinner-content>
+<div class="container" [hidden]="isRequesting">
+    <div class="card">
+        <form role="form">
+            <div class="card-header">
+                <h2>
+                    {{sub_title}}
+                    <small>
+                        {{sub_title_description}}
+                    </small>
+                </h2>
+            </div>
+
+            <div class="card-body card-padding">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="input-group form-group fg-float">
+                            <span class="input-group-addon"><i class="md md-expand-more"></i></span>
+                            <div class="fg-line select">
+                                <select class="form-control" [(ngModel)]="treatment.SpecialityTypeId" name="SpecialityTypeId"  (change)="selectSpeciality($event.target.value)">
+                                    <option *ngFor="let opt of specialitiesTypes" [value]="opt.Id">{{opt.Name}}</option>
+                                </select>
+                            </div>
+                            <label class="fg-label padding-left-40" [hidden]="treatment.TreatmentsTypeId">Especialidad</label>
+                         </div>
+                    </div>
+                    <div class="col-sm-6" [hidden]="newTreatment">
+                        <div class="input-group form-group fg-float">
+                            <span class="input-group-addon"><i class="md md-expand-more"></i></span>
+                            <div class="fg-line select">
+                                <select class="form-control" [(ngModel)]="treatment.TreatmentsTypeId" name="TreatmentsTypeId">
+                                    <option *ngFor="let opt of treatmentsTypes" [value]="opt.Id">{{opt.Name}}</option>
+                                </select>
+                            </div>
+                            <label class="fg-label padding-left-40" [hidden]="treatment.TreatmentsTypeId">Tipo de tratamiento</label>
+                            <span class="input-group-addon"><a (click)="addTreatmentType()"><i class="md md-playlist-add"></i></a></span>
+                        </div>
+                    </div>
+                    
+                    <div class="col-sm-6" [hidden]="!newTreatment">
+                        <div class="input-group form-group fg-float">
+                            <span class="input-group-addon"><i class="md md-description"></i></span>
+                            <div class="fg-line">
+                                <input type="text" class="form-control" [(ngModel)]="treatment.TreatmentType" name="TreatmentType">
+                            </div>
+                            <label class="fg-label padding-left-40" [hidden]="treatment.TreatmentType">Nuevo tipo de tratamiento</label>
+                            <span class="input-group-addon"><a (click)="showTreatmentType()"><i class="md md-menu"></i></a></span>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-2">
+                        <div class="input-group form-group fg-float">
+                            <span class="input-group-addon"><i class="md md-attach-money"></i></span>
+                            <div class="fg-line">
+                                <input type="text" class="form-control" [(ngModel)]="treatment.Price" name="price" (keyup.enter)="save()">
+                            </div>
+                            <label class="fg-label padding-left-40" [hidden]="treatment.Price">Precio</label>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-2">
+                        <div class="input-group form-group fg-float">
+                            <span class="input-group-addon"><i class="md md-bookmark"></i></span>
+                            <div class="fg-line">
+                                <input type="text" class="form-control" [(ngModel)]="treatment.Discount" name="Discount" (keyup.enter)="save()">
+                            </div>
+                            <label class="fg-label padding-left-40" [hidden]="treatment.Discount">Descuento</label>
+                        </div>
+                    </div>
+
+                </div>
+
+                <br /><br />
+                <button class="btn btn-primary btn-sm m-t-10" (click)="save()">Guardar</button>
+                <button type="submit" class="btn btn-default btn-sm m-t-10" (click)="cancel()">Cancelar</button>
+            </div>
+
+            <br />
+        </form>
+    </div>
+
+
+</div>

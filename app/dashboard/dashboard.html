@@ -1,0 +1,198 @@
+<spinner-content [isRunning]="isRequesting"></spinner-content>
+<div class="container" [hidden]="isRequesting">
+    <div class="block-header">
+        <h2>{{title}}</h2>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-12">
+            <div class="btn-demo text-center">
+                <button class="btn bgm-teal" [routerLink]="['/profile']">
+                    <i class="md md-person"></i> Perfil
+                </button>
+                <button class="btn btn-danger" [routerLink]="['/calendar']">
+                    <i class="md md-today"></i> Agenda
+                </button>
+                <button class="btn btn-primary" [routerLink]="['/data-personal']">
+                    <i class="md md-account-child"></i> Pacientes
+                </button>
+                <button class="btn btn-success" [routerLink]="['/accounting-all', 'all']" [disabled]="!appGlobals.roleAdmin.getValue()">
+                    <i class="md md-attach-money"></i> Estados de cuentas
+                </button>
+                <button class="btn btn-warning" [routerLink]="['/employees']" [disabled]="!appGlobals.roleAdmin.getValue()">
+                    <i class="md md-view-list"></i> Empleados
+                </button>
+                <button class="btn bgm-purple" [routerLink]="['/treatments']" [disabled]="!appGlobals.roleAdmin.getValue()">
+                    <i class="md md-local-hospital"></i> Tratamientos
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="mini-charts" [hidden]="!appGlobals.roleAdmin.getValue()">
+            <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3">
+                <div class="mini-charts-item bgm-cyan">
+                    <div class="clearfix">
+                        <div class="chart stats-bar"></div>
+                        <div class="count">
+                            <small>Total de pacientes</small>
+                            <h2># {{ totalPatients }}</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3">
+                <div class="mini-charts-item bgm-bluegray">
+                    <div class="clearfix">
+                        <div class="chart stats-line-2"></div>
+                        <div class="count">
+                            <small>Presuestado en el mes</small>
+                            <h2>$ {{ totalAmount }}</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3">
+                <div class="mini-charts-item bgm-lightgreen">
+                    <div class="clearfix">
+                        <div class="chart stats-bar-2"></div>
+                        <div class="count">
+                            <small>Cobrado en el mes</small>
+                            <h2>$ {{ totalSales }}</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3 p-r-20">
+                <div class="mini-charts-item bgm-deeporange">
+                    <div class="clearfix">
+                        <div class="chart stats-line-2"></div>
+                        <div class="count">
+                            <small>Cuentas por cobrar</small>
+                            <h2>$ {{ totalAmountOwed }}</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-8 p-r-20">
+            <!-- Todo Lists -->
+            <div id="todo-lists">
+                <div class="tl-header bgm-blue">
+                    <h2>Lista de tareas</h2>
+                    <small>Adiciona, edita y organiza tus tareas</small>
+
+                    <ul class="actions actions-alt">
+                        <li class="dropdown">
+                            <a href="" data-toggle="dropdown">
+                                <i class="md md-more-vert"></i>
+                            </a>
+
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li>
+                                    <a href="#/dashboard" (click)="allTodoList()">Ver todas</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="clearfix"></div>
+
+                <div class="tl-body">
+                    <div id="add-tl-item">
+                        <i class="add-new-item md md-add"></i>
+
+                        <div class="add-tl-body">
+                            <form #ftodolist="ngForm">
+                                <textarea placeholder="Que quieres o debes de hacer..." [(ngModel)]="todo.Value" name="value_todo_list" #value_todo_list="ngModel"
+                                          required></textarea>
+
+                                <div class="add-tl-actions">
+                                    <a href="" data-tl-action="dismiss">
+                                        <i class="md md-close"></i>
+                                    </a>
+                                    <a (click)="save()" data-tl-action="save">
+                                        <i class="md md-check"></i>
+                                    </a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="checkbox media" *ngFor="let item of todo_list">
+                        <div class="pull-right">
+                            <ul class="actions actions-alt">
+                                <li class="dropdown">
+                                    <a href="" data-toggle="dropdown">
+                                        <i class="md md-more-vert"></i>
+                                    </a>
+
+                                    <ul class="dropdown-menu dropdown-menu-right">
+                                        <li>
+                                            <a (click)="delete(item, index)">ELIMINAR</a>
+                                        </li>
+                                        <li>
+                                            <a (click)="archive(item, index )">ARCHIVAR</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="media-body">
+                            <label>
+                                <input type="checkbox" (change)="update($event.target.checked, item, index)" [checked]="item.Status == 'CHECK'">
+                                <i class="input-helper"></i>
+                                <span>{{ item.Value }}</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-4 p-r-20">
+            <form #finvitation="ngForm">
+                <div class="card">
+
+                    <div class="card-header ch-alt bgm-blue">
+                        <h2>
+                            Invitar a un colega
+                            <small>
+                                Por cada colega que invites y se una a la plataforma ganas
+                                <strong>5$</strong> de saldo
+                            </small>
+                        </h2>
+                    </div>
+
+                    <div class="card-body card-padding">
+                        <br />
+                        <div class="form-group fg-float">
+                            <div class="fg-line">
+                                <input type="email" class="form-control" [(ngModel)]="referred.EmailReferred" [ngModelOptions]="{standalone: true}">
+                            </div>
+                            <label class="fg-label">Correo de su colega</label>
+                        </div>
+                        <br />
+                        <div class="form-group fg-float">
+                            <div class="fg-line fg-toggled">
+                                <textarea class="form-control auto-size" [(ngModel)]="referred.Description" [ngModelOptions]="{standalone: true}"></textarea>
+                            </div>
+                            <label class="fg-label">Mensaje para su colega</label>
+                        </div>
+                        <br />
+                        <br />
+                        <button class="btn btn-info" (click)="sendReferral()">Invitar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>

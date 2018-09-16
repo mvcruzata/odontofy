@@ -1,0 +1,42 @@
+<spinner-content [isRunning]="isRequesting"></spinner-content>
+
+<div class="container">
+    <!--div class="block-header">
+        <h2>Agenda <small> </small></h2>
+
+        <ul class="actions">
+            <li>
+                <a class="form-witget" [routerLink]="['/appoitments', -1, '!']">
+                    <i class="md md-add"></i>
+                </a>
+            </li>
+        </ul>
+    </div-->
+    <div class="card">
+        <div class="card-padding card-header">
+            <h2>Agenda <small> </small></h2>
+
+            <ul class="actions">
+                <li>
+                    <a class="form-witget" [routerLink]="['/appoitments', -1, '!']">
+                        <i class="md md-add"></i>
+                    </a>
+                </li>
+            </ul>
+            <!--div class="row">
+                <div class="col-sm-6">
+                    <div class="input-group form-group">
+                        <span class="input-group-addon"><i class="md md-school"></i></span>
+                        <div class="fg-line select">
+                            <select class="form-control" [(ngModel)]="clinicWorker" name="clinicWorker" (change)="selectClinicWorker($event.target.value)">
+                                <option value="-1">Todas tus cl&iacute;nicas</option>
+                                <option *ngFor="let opt of clinicsWorker" [value]="opt.Id">{{opt.Name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div-->
+        </div>
+        <div id="calendar"></div>
+    </div>
+</div>

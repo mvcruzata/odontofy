@@ -1,0 +1,91 @@
+<spinner-content [isRunning]="isRequesting"></spinner-content>
+<div class="container" [hidden]="isRequesting">
+    <!--div class="block-header">
+        <h2>Alertas</h2>
+    </div-->
+    <div class="card">
+        <div class="card-header">
+            <h2>
+                {{subtitle}}
+                <small>{{description_subtitle}}</small>
+            </h2>
+        </div>
+
+        <div class="text-center" [hidden]="response.Total > 0">
+            <i class="md md-settings-ethernet" style="font-size: 100px;"></i>
+            <div>No hay elementos para mostrar</div>
+        </div>
+
+        <div class="table-responsive" [hidden]="!(response.Total > 0)">
+            <table class="table table-striped" [mfData]="response.Data" #mf="mfDataTable" [mfRowsOnPage]="10">
+                <thead>
+                    <tr>
+                        <th style="width: 30%">
+                            <mfDefaultSorter by="name">Paciente</mfDefaultSorter>
+                        </th>
+                        <!--th class="hidden-xs" style="width: 10%">
+                            <mfDefaultSorter by="total">Tipo</mfDefaultSorter>
+                        </th-->
+                        <th class="hidden-xs" style="width: 20%">
+                            <mfDefaultSorter by="action">Correo</mfDefaultSorter>
+                        </th>
+                        <th class="hidden-xs" style="width: 10%">
+                            <mfDefaultSorter by="action">Tel&eacute;fono</mfDefaultSorter>
+                        </th>
+                        <th style="width: 10%">
+                            <mfDefaultSorter by="action">M&oacute;bil</mfDefaultSorter>
+                        </th>
+                        <th style="width: 5%">
+                            <mfDefaultSorter by="action">D&iacute;as</mfDefaultSorter>
+                        </th>
+                        <th style="width: 5%">
+                            <mfDefaultSorter by="action">Hora</mfDefaultSorter>
+                        </th>
+                        <th style="width: 10%">
+                            <mfDefaultSorter by="action">Estado</mfDefaultSorter>
+                        </th>
+                        <th class="hidden-xs" style="width: 10%">
+                            <mfDefaultSorter by="total">Contactar</mfDefaultSorter>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of mf.data">
+                        <td>{{item.title}} </td>
+                        <!--td class="hidden-xs">{{item.type === "NextAppoitment" ? "Consulta" : "Cita"}}</td-->
+                        <td class="hidden-xs"><div *ngIf="(appGlobals.owner.getValue() && !item.PatientFromPartner) || isSuperAdmin">{{item.mail}}</div></td>
+                        <td class="hidden-xs"><div *ngIf="(appGlobals.owner.getValue() && !item.PatientFromPartner) || isSuperAdmin">{{item.phone}}</div></td>
+                        <td><div *ngIf="(appGlobals.owner.getValue() && !item.PatientFromPartner) || isSuperAdmin">{{item.mobile}}</div></td>
+                        <td>
+                            <div *ngIf="item.cantDays == 0">Hoy</div>
+                            <div *ngIf="item.cantDays == 1">Ma&ntilde;ana</div>
+                            <div *ngIf="item.cantDays > 1">{{item.cantDays}}</div>
+                        </td>
+                        <td>{{item.startDate | date:'HH:mm'}}</td>
+                        <td>
+                            <select class="form-control" id="statusAppoitment" [ngClass]="item.appoitment.ClassName" (change)="onChangeApp($event.target.value, item)">
+                                <option class="bgm-red" value="PLANNED" [selected]="item.appoitment.Status == 'PLANNED'">Planificado</option>
+                                <option class="bgm-orange" value="SCHEDULED" [selected]="item.appoitment.Status == 'SCHEDULED'">Agendado</option>
+                                <option class="bgm-green" value="CONFIRMED" [selected]="item.appoitment.Status == 'CONFIRMED'">Confirmado</option>
+                                <option class="bgm-black" value="CANCELLED" [selected]="item.appoitment.Status == 'CANCELLED'">Cancelado</option>
+                                <option class="bgm-gray" value="NOTASSIST" [selected]="item.appoitment.Status == 'NOTASSIST'">No Asisti&oacute;</option>
+                            </select>
+                        </td>
+                        <td>
+                            <a *ngIf="(appGlobals.owner.getValue() && !item.PatientFromPartner) || isSuperAdmin" (click)="openWhatsApp(item)">
+                                <div class="whatsapp"></div>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4">
+                            <mfBootstrapPaginator [rowsOnPageSet]="[10,25,50]"></mfBootstrapPaginator>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>

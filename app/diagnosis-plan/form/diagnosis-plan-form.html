@@ -1,0 +1,125 @@
+<form role="form">
+    <div class="card-header">
+        <h2>
+            Informaci&oacute;n del diagn&oacute;stico
+            <small>
+                {{sub_title_description}}
+            </small>
+        </h2>
+
+        <div class="alert alert-success" role="alert" [hidden]="appGlobals.roleDoctor.getValue()">
+            Solicite la afiliaci&oacute;n de su cl&iacute;nica para el ingreso de planes diagn&oacute;sticos y tratamientos. &nbsp;&nbsp;&nbsp;
+            <a class="form-witget btn btn-primary" [routerLink]="['/profile']"><i class="md md-person"></i> Afiliar mi cl&iacute;nica</a>
+        </div>
+    </div>
+    <div class="card-body card-padding">
+
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="input-group form-group">
+                    <span class="input-group-addon"><i class="md md-expand-more"></i></span>
+                    <div class="fg-line select">
+                        <select class="form-control" name="specialitietype" [(ngModel)]="diagnosisPlan.SpecialitieTypeId" (change)="selectSpeciality($event.target.value)" #specialitietype="ngModel">
+                            <option [value]="">Seleccione</option>
+                            <option *ngFor="let opt of specialitiesTypes" [value]="opt.Id">{{opt.Name}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <div class="input-group form-group">
+                    <span class="input-group-addon"><i class="md md-expand-more"></i></span>
+
+                    <div class="fg-line select">
+                        <select class="form-control" [(ngModel)]="diagnosisPlan.TreatmentId" (click)="getAmount(1)" name="treatment" #treatment="ngModel">
+                            <option *ngFor="let opt of treatments" [value]="opt.Id">{{opt.CCatalog.Name}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="input-group form-group">
+                    <span class="input-group-addon"><i class="md md-bookmark"></i></span>
+
+                    <div class="fg-line">
+                        <input type="text" class="form-control" placeholder="Diagn&oacute;stico y complicaciones" [(ngModel)]="diagnosisPlan.DiagnosticsAndComplications" name="DiagnosticsAndComplications" #DiagnosticsAndComplications="ngModel">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="input-group form-group">
+                    <span class="input-group-addon"><i class="md md-bookmark"></i></span>
+
+                    <div class="fg-line">
+                        <input type="text" class="form-control" placeholder="Procedimientos" [(ngModel)]="diagnosisPlan.Procedures" name="Procedures" #Procedures="ngModel">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="input-group form-group">
+                    <span class="input-group-addon"><i class="md md-bookmark"></i></span>
+
+                    <div class="fg-line">
+                        <input type="text" class="form-control" placeholder="Indicaciones" [(ngModel)]="diagnosisPlan.Prescriptions" name="Prescriptions" #Prescriptions="ngModel">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-3 p-t-10">
+                <div class="input-group form-group">
+                    <label class="radio radio-inline m-r-20">
+                        <input type="radio" name="inlineRadioOptions" checked (click)="getAmount(1)">
+                        <i class="input-helper"></i>
+                        Costo establecido
+                    </label>
+                </div>
+            </div>
+
+            <div class="col-sm-3 p-t-10">
+                <div class="input-group form-group">
+                    <label class="radio radio-inline m-r-20">
+                        <input type="radio" name="inlineRadioOptions" (click)="getAmount(2)" [checked]="diagnosisPlan.PercentDiscountStablished > 0">
+                        <i class="input-helper"></i>
+                        Descuento establecido
+                    </label>
+                </div>
+            </div>
+
+            <div class="col-sm-3 p-t-10">
+                <div class="input-group form-group">
+                    <label class="radio radio-inline m-r-20">
+                        <input type="radio" name="inlineRadioOptions" (click)="getAmount(3)" [checked]="diagnosisPlan.PercentSpecialDiscount > 0">
+                        <i class="input-helper"></i>
+                        Descuento especial
+                    </label>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="input-group form-group">
+                    <span class="input-group-addon"><i class="md md-attach-money"></i></span>
+                    <div class="fg-line">
+                        <input type="text" class="form-control" [(ngModel)]="diagnosisPlan.TreatmentAmount" [disabled]="diagnosisPlan.ValueType != 3" (keypress)="getAmount(3)" name="TreatmentAmount" #TreatmentAmount="ngModel" (keyup.enter)="save()">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br /><br />
+
+        <button type="submit" class="btn btn-primary btn-sm m-t-10" (click)="save()" data-dismiss="modal">Guardar</button>
+        <button type="submit" class="btn btn-default btn-sm m-t-10" (click)="cancel()" data-dismiss="modal">Cancelar</button>
+    </div>
+
+    <br />
+</form>

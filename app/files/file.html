@@ -1,0 +1,17 @@
+<label class="uploader" ondragover="return false;"
+       [class.loaded]="loaded"
+       [style.outlineColor]="dragging ? activeColor : baseColor"
+       (dragenter)="handleDragEnter()"
+       (dragleave)="handleDragLeave()"
+       (drop)="handleDrop($event)">
+
+    <i [class]="((imageSrc.length > 0) ? 'displayNone' : 'md md-file-upload md-5x')">
+    </i>
+
+    <img id="imageSrc" [src]="imageSrc"
+         (load)="handleImageLoad()"
+         [class.loaded]="imageLoaded"/>
+
+    <input type="file" name="file" accept="image/*"
+           (change)="handleInputChange($event)" capture="camera">
+</label>

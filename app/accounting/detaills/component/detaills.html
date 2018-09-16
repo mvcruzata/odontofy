@@ -1,0 +1,46 @@
+
+<div class="text-center" [hidden]="response.Total > 0">
+    <i class="md md-settings-ethernet" style="font-size: 100px;"></i>
+    <div>No existen detalles de estados de cuentas para el paciente</div>
+</div>
+
+<div class="table-responsive" [hidden]="!(response.Total > 0)">
+    <table class="table table-striped" [mfData]="response.Data" #mf="mfDataTable" [mfRowsOnPage]="5">
+        <thead>
+            <tr>
+                <th style="width: 55%">
+                    <mfDefaultSorter by="name">Nombre</mfDefaultSorter>
+                </th>
+                <th style="width: 10%">
+                    <mfDefaultSorter by="total">Presupuestado</mfDefaultSorter>
+                </th>
+                <th style="width: 10%">
+                    <mfDefaultSorter by="total">Pagado</mfDefaultSorter>
+                </th>
+                <th style="width: 10%">
+                    <mfDefaultSorter by="total">Pendiente</mfDefaultSorter>
+                </th>
+                <th style="width: 15%">
+                    <mfDefaultSorter by="total">Fecha</mfDefaultSorter>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of mf.data">
+                <td>{{item.Name}}</td>
+                <td>{{item.TreatmentAmount}}</td>
+                <td>{{item.Payment}}</td>
+                <td>{{item.TreatmentAmount - item.Payment}}</td>
+                <td>{{item.DateCreate | date:'dd-MM-yyyy'}}</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="4">
+                    <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25]"></mfBootstrapPaginator>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+

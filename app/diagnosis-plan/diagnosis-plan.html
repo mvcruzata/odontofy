@@ -1,0 +1,281 @@
+<spinner-content [isRunning]="isRequesting"></spinner-content>
+
+<div class="block-header">
+    <ul class="actions">
+        <li>
+            <a (click)="print()">
+                <i class="md md-print"></i>
+            </a>
+        </li>
+        <li>
+            <a data-toggle="modal" href="#" (click)="ngOnInit()">
+                <i class="md md-cached"></i>
+            </a>
+        </li>
+        <li>
+            <a data-toggle="modal" href="#modalDiagnosisPlanForm">
+                <i class="md md-add"></i>
+            </a>
+        </li>
+        <li>
+            <a data-toggle="modal" href="#modalAppoiment">
+                <i class="md md-event"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+<br />
+
+<div class="text-center" [hidden]="response.Total > 0">
+    <i class="md md-settings-ethernet" style="font-size: 100px;"></i>
+    <div>No existen planes diagn&oacute;sticos para el paciente</div>
+</div>
+
+<div class="table-responsive" [hidden]="!(response.Total > 0)" id="treatmentsList">
+    <table class="table table-striped" [mfData]="response.Data" #mf="mfDataTable">
+        <thead>
+            <tr>
+                <th style="width: 45%">
+                    <mfDefaultSorter by="name">Tratamiento</mfDefaultSorter>
+                </th>
+                <th style="width: 5%" class="text-center">
+                    <mfDefaultSorter by="age">Pieza</mfDefaultSorter>
+                </th>
+                <th style="width: 5%" class="text-center">
+                    <mfDefaultSorter by="age">Presupuestado</mfDefaultSorter>
+                </th>
+                <th style="width: 5%" class="text-center">
+                    <mfDefaultSorter by="age">Pagado</mfDefaultSorter>
+                </th>
+                <th style="width: 5%" class="text-center">
+                    <mfDefaultSorter by="age">Pendiente</mfDefaultSorter>
+                </th>
+                <th style="width: 15%" class="text-center">
+                    <mfDefaultSorter by="age">Fecha de ejecuci&oacute;n</mfDefaultSorter>
+                </th>
+                <th style="width: 5%" class="text-center">
+                    <mfDefaultSorter by="age">Estado</mfDefaultSorter>
+                </th>
+                <th style="width: 15%" class="actions text-center">
+                    <mfDefaultSorter by="city">Acci&oacute;n</mfDefaultSorter>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of mf.data">
+                <td>{{item.Name}}</td>
+                <td>{{item.Tooth}}</td>
+                <td>{{item.TreatmentAmount}}</td>
+                <td [ngClass]="item.Status == 'ADVANCED' ? 'bgm-green badge' : ''">{{item.Payment}}</td>
+                <td [ngClass]="((item.TreatmentAmount - item.Payment) > 0) && item.Status == 'FINISHED' ? 'bgm-red badge' : ''">{{item.TreatmentAmount - item.Payment}}</td>
+                <td>{{(item.dateExecute == null ? item.DatePayment : item.dateExecute) | date:'dd-MM-yyyy' }}</td>
+                <td class="text-center">{{getStatus(item.Status)}}</td>
+                <td class="actions text-center">
+                    <ul class="actions">
+                        <li>
+                            <a data-toggle="modal" href="#modalPayment" (click)="selectTreatment(item.Id, item.TreatmentAmount, item.Payment)">
+                                <i class="md md-attach-money"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a data-toggle="modal" href="#modalConsultationForm" (click)="selectDiagnosisPlanConsultation(item.Id)">
+                                <i class="md md-remove-red-eye"></i>
+                            </a>
+                        </li>
+                        <li class="dropdown">
+                            <a href="" data-toggle="dropdown">
+                                <i class="md md-more-vert"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li>
+                                    <a data-toggle="modal" href="#modalDiagnosisPlanForm" (click)="selectDiagnosisPlan(item.Id)">Editar</a>
+                                </li>
+                                <li>
+                                    <button type="button" class="btn btn-link pull-right" (click)="delete(item.Id)" data-dismiss="modal" style="text-transform: capitalize;">Eliminar</button>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td><h4><u>Total</u></h4></td>
+                <td></td>
+                <td><h4><u>{{totalAmount}}</u></h4></td>
+                <td><h4><u>{{totalPayment}}</u></h4></td>
+                <td><h4><u>{{totalPending}}</u></h4></td>
+                <td class="actions"></td>
+            </tr>
+        </tfoot>
+    </table>
+    <br />
+    <br />
+    <br />
+    <br />
+</div>
+
+<div class="modal fade col-sm-offset-2" id="modalDiagnosisPlanForm" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog col-xs-12 col-sm-4">
+        <div class="modal-content">
+            <diagnosis-plan-form [diagnosisPlan]="diagnosisPlan" (response)="handleResponseUpdated($event)"></diagnosis-plan-form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade col-sm-offset-2" id="modalConsultationForm" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog col-xs-12 col-sm-4">
+        <div class="modal-content">
+            <consultation-form [diagnosisPlan]="diagnosisPlan" [response]="responseConsultation"></consultation-form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade col-sm-offset-2" id="modalPayment" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog col-xs-12 col-sm-4">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Cobrar tratamiento</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-4">
+                        <div class="input-group form-group">
+                            <label class="radio radio-inline m-r-20">
+                                <input type="radio" name="inlineRadioOptions" checked (click)="setStatus('ADVANCED')">
+                                <i class="input-helper"></i>
+                                Adelantado
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4">
+                        <div class="input-group form-group">
+                            <label class="radio radio-inline m-r-20">
+                                <input type="radio" name="inlineRadioOptions" (click)="setStatus('INPROCESS')">
+                                <i class="input-helper"></i>
+                                En proceso
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4">
+                        <div class="input-group form-group">
+                            <label class="radio radio-inline m-r-20">
+                                <input type="radio" name="inlineRadioOptions" (click)="setStatus('FINISHED')" checked>
+                                <i class="input-helper"></i>
+                                Terminado
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-4">
+                        <span class="input-group form-group">Presupuestado: <label>{{diagnosisPlan.TreatmentAmount}}</label></span>
+                    </div>
+                    <div class="col-xs-12 col-sm-4">
+                        <span class="input-group form-group">Abonado: <label>{{diagnosisPlan.Payment}}</label></span>
+                    </div>
+                    <div class="col-xs-12 col-sm-4">
+                        <span class="input-group form-group">Pendiente: <label>{{amountPending}}</label></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-4">
+                        <div class="input-group form-group">
+                            <span class="input-group-addon"><i class="md md-attach-money"></i></span>
+                            <div>
+                                <input type="text" class="form-control" placeholder="Monto abonado" [(ngModel)]="diagnosisPlan.Pay" [ngModelOptions]="{standalone: true}" (keyup.enter)="payment()" autofocus>
+                            </div>
+                        </div>
+                        <small class="c-red" *ngIf="diagnosisPlan.Pay  > amountPending">El monto abonado no debe ser mayor al monto pendinete para este tratamiento</small>
+                    </div>
+                    <div class="col-xs-12 col-sm-4">
+                        <div class="input-group form-group">
+                            <span class="input-group-addon"><i class="md md-expand-more"></i></span>
+                            <div class="fg-line select">
+                                <select class="form-control" [(ngModel)]="diagnosisPlan.PaymentMethodsId" [ngModelOptions]="{standalone: true}">
+                                    <option [value]="-1">Forma de pago</option>
+                                    <option *ngFor="let opt of paymentMethods" [value]="opt.Id">{{opt.Name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4">
+                        <div class="input-group form-group">
+                            <div class="col-sm-3">
+                                <label class="checkbox checkbox-inline m-r-20">
+                                    <input type="checkbox" [checked]="diagnosisPlan.Invoiced  === 'True'" [(ngModel)]="diagnosisPlan.Invoiced" name="Facturado?">
+                                    <i class="input-helper"></i>
+                                    Facturado
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-8">
+                        <div class="input-group form-group {{ (EmployeeId.valid || (EmployeeId.pristine && !fappoitment.submitted)) ? '' : 'has-error has-feedback' }}">
+                            <span class="input-group-addon"><i class="md md-school"></i></span>
+                            <div class="fg-line select">
+                                <select class="form-control" [(ngModel)]="doctorExcecuteId" data-live-search="true" name="EmployeeId" #EmployeeId="ngModel" [ngModelOptions]="{standalone: true}">
+                                    <option value="-1">Seleccione el profesional que lo atendi&oacute;</option>
+                                    <option *ngFor="let opt of allEmployees" [value]="opt.EmployeeId">{{opt.Name}} {{opt.LastNames}} - {{opt.especiality.Name}}</option>
+                                </select>
+                            </div>
+                            <span class="md md-close form-control-feedback {{ (EmployeeId.valid || (EmployeeId.pristine && !fappoitment.submitted)) ? 'hidden' : '' }}"></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="input-group form-group">
+                            <div>
+                                <input  *ngIf="diagnosisPlan.Invoiced" type="text" class="form-control" placeholder="N&uacute;mero de factura" [(ngModel)]="diagnosisPlan.InvoicedNumber" [ngModelOptions]="{standalone: true}" (keyup.enter)="payment()">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" (click)="payment()" data-dismiss="modal" [disabled]="diagnosisPlan.Pay  > amountPending">Cobrar</button>
+                <button type="button" class="btn btn-link" (click)="close()" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade col-sm-offset-2" id="modalAppoiment" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog col-xs-12 col-sm-4">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Pr&oacute;xima consulta</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="input-group form-group">
+                            <span class="input-group-addon"><i class="md md-event"></i></span>
+                            <div class="fg-line">
+                                <input type="text" class="form-control" placeholder="Pr&oacute;xima consulta en:" [(ngModel)]="appoiment.CantDateType" [ngModelOptions]="{standalone: true}" (keyup.enter)="save()">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="input-group form-group">
+                            <span class="input-group-addon"></span>
+                            <div class="fg-line select">
+                                <select class="form-control" [(ngModel)]="appoiment.DateType" name="DateType">
+                                    <option value="day">D&iacute;as</option>
+                                    <option value="month">Meses</option>
+                                    <option value="year">A&ntilde;os</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" (click)="createNextAppoiment()" data-dismiss="modal">Agendar</button>
+                <button type="button" class="btn btn-link" (click)="close()" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>

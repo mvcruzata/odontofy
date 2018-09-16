@@ -1,0 +1,248 @@
+<spinner-content [isRunning]="isRequesting"></spinner-content>
+<div class="container" [hidden]="isRequesting">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="lvh-label">
+                    <div class="lv-avatar pull-left">
+                        <img [src]="profileImg" class="pv-main" alt="">
+                    </div>
+                    <h2>
+                        {{person.Name}} {{person.LastNames}}
+                    </h2>
+                    <small>
+                        <i class="md md-lock c-red" *ngIf="patient.PatientFromPartner">De OdontoBy</i>
+                        <i class="md md-email pull-left" *ngIf="(appGlobals.owner.getValue() && !patient.PatientFromPartner) || isSuperAdmin"> {{person.Email}}</i>&nbsp;&nbsp;
+                        <i class="md md-settings-cell pull-left" *ngIf="(appGlobals.owner.getValue() && !patient.PatientFromPartner) || isSuperAdmin"> {{person.Mobile}}</i>&nbsp;&nbsp;
+                        <i class="md md-phone pull-left" *ngIf="(appGlobals.owner.getValue() && !patient.PatientFromPartner) || isSuperAdmin"> {{person.Phone}}</i>&nbsp;&nbsp;
+                        <i class="md md-today pull-left"> {{person.Age > 0 ? person.Age : ''}} {{person.Months > 0 ? person.Months : ''}} {{person.Months == 1 ? 'mes' : ( person.Months > 1 ? 'meses': '')}}</i>
+                    </small>
+                </div>
+
+                <ul class="lv-actions actions">
+                    <li>
+                        <a (click)="print()">
+                            <i class="md md-print"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#/patiens/{{patient.Id}}">
+                            <i class="md md-edit"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a data-toggle="modal" href="#modalAppoimentGlobal">
+                            <i class="md md-today"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#/data-personal">
+                            <i class="md md-account-child"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <br />
+            <div class="card-body">
+                <div [hidden]="hiddenOdonto">
+                    <ul class="tab-nav tn-justified tn-icon" role="tablist" tabindex="1" style="overflow: hidden; outline: none;">
+                        <li role="presentation" class="active">
+                            <a class="col-sx-4" href="#tab-1" aria-controls="tab-1" role="tab" data-toggle="tab" aria-expanded="true">
+                                <i class="md md-local-hospital icon-tab"></i>
+                                <span class="hidden-xs">Historia cl&iacute;nica</span>
+                            </a>
+                        </li>
+                        <li role="presentation" class="hidden-xs">
+                            <a class="col-xs-4" href="#tab-3" aria-controls="tab-3" role="tab" data-toggle="tab">
+                                <i class="md md-map icon-tab"></i>
+                                <span class="hidden-xs">Odontograma</span>
+                            </a>
+                        </li>
+                        <li role="presentation">
+                            <a class="col-xs-4" href="#tab-2" aria-controls="tab-2" role="tab" data-toggle="tab">
+                                <i class="md md-list icon-tab"></i>
+                                <span class="hidden-xs">Plan diagn&oacute;stico y tratamientos</span>
+                            </a>
+                        </li>
+                        <li role="presentation">
+                            <a class="col-xs-4" href="#tab-5" aria-controls="tab-5" role="tab" data-toggle="tab">
+                                <i class="md md-photo-library icon-tab"></i>
+                                <span class="hidden-xs">Im&Aacute;genes</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div [hidden]="!hiddenOdonto">
+                    <ul class="tab-nav tn-justified tn-icon" role="tablist" tabindex="1" style="overflow: hidden; outline: none;">
+                        <li role="presentation" class="active">
+                            <a class="col-sx-4" href="#tab-1" aria-controls="tab-1" role="tab" data-toggle="tab" aria-expanded="true">
+                                <i class="md md-local-hospital icon-tab"></i>
+                                <span class="hidden-xs">Historia cl&iacute;nica</span>
+                            </a>
+                        </li>
+                        <li role="presentation">
+                            <a class="col-xs-4" href="#tab-2" aria-controls="tab-2" role="tab" data-toggle="tab">
+                                <i class="md md-list icon-tab"></i>
+                                <span class="hidden-xs">Plan diagn&oacute;stico y tratamientos</span>
+                            </a>
+                        </li>
+                        <li role="presentation">
+                            <a class="col-xs-4" href="#tab-5" aria-controls="tab-5" role="tab" data-toggle="tab">
+                                <i class="md md-photo-library icon-tab"></i>
+                                <span class="hidden-xs">Im&Aacute;genes</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="tab-content p-20">
+                    <div role="tabpanel" class="tab-pane animated fadeIn active" id="tab-1">
+                        <div id="patientView">
+                            <patiens-view></patiens-view>
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane animated fadeIn" id="tab-2">
+                        <diagnosis-plan></diagnosis-plan>
+                    </div>
+                    <div role="tabpanel" class="tab-pane animated fadeIn" id="tab-5">
+                        <!-- Tabs Images-->
+                        <ul class="tab-nav tn-justified tn-icon" role="tablist">
+                            <li role="presentation" class="active">
+                                <a class="col-xs-4" href="#tab-comparison" aria-controls="tab-comparison" role="tab" data-toggle="tab">
+                                    <i class="md md-photo-library icon-tab"></i>
+                                    <span class="hidden-xs">Antes & Despues</span>
+                                </a>
+                            </li>
+                            <li role="presentation">
+                                <a class="col-sx-4" href="#tab-all-images" aria-controls="tab-all-images" role="tab" data-toggle="tab">
+                                    <i class="md md-photo-album icon-tab"></i>
+                                    <span class="hidden-xs">Todas las Imagenes</span>
+                                </a>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content p-20">
+                            <div role="tabpanel" class="tab-pane animated fadeIn" id="tab-all-images">
+                                <div class="picture-list">
+                                    <div class="pl-body">
+                                        <div class="block-header">
+                                            <ul class="actions">
+                                                <li>
+                                                    <a data-toggle="modal" href="#modalLoadImage">
+                                                        <i class="md md-image"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="lightbox row">
+                                    <div class="col-sm-2 col-xs-6" *ngFor="let file of filesPatient">
+                                        <a data-toggle="modal" href="#modalZoomImage" (click)="zoomImage(file)">
+                                            <div class="lightbox-item">
+
+                                                <img src="{{file}}">
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div role="tabpanel" class="tab-pane animated fadeIn in active" id="tab-comparison">
+                                <div class="row">
+                                    <div class="col-sm-6 text-center">
+                                        <file-uploader id="image-Before" [activeColor]="'orangered'" [baseColor]="'lightgray'" [imageSrc]="imageSrcBefore"></file-uploader>
+                                        <button type="button" class="btn btn-primary" (click)="addFileStatus('Before')" data-dismiss="modal">Guardar</button>
+                                    </div>
+                                    <div class="col-sm-6 text-center">
+                                        <file-uploader id="image-After" [activeColor]="'orangered'" [baseColor]="'lightgray'" [imageSrc]="imageSrcAfter"></file-uploader>
+                                        <button type="button" class="btn btn-primary" (click)="addFileStatus('After')" data-dismiss="modal">Guardar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal fade col-sm-offset-2" id="modalLoadImage" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog col-xs-12 col-sm-4">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Subir imagen</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <file-uploader id="image-All" [activeColor]="'orangered'" [baseColor]="'lightgray'"></file-uploader>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary" (click)="addFileStatus('All')" data-dismiss="modal">Guardar</button>
+                                        <button type="button" class="btn btn-link" (click)="close()" data-dismiss="modal">Cancelar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal fade" id="modalZoomImage" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog col-xs-12 col-sm-12" style="width: 100%;">
+                                <div class="modal-content">
+                                    <!--div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">x</button>
+                                    </div-->
+                                    <div class="modal-body">
+                                        <img id="zoomImg" src="" />
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-link" (click)="deleteFile()" data-dismiss="modal">Eliminar</button>
+                                        <button type="button" class="btn btn-link" (click)="close()" data-dismiss="modal">Cerrar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div role="tabpanel" class="tab-pane animated fadeIn" id="tab-3">
+                        <odontogram style="width:100%;max-width:100%"></odontogram>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade col-sm-offset-2" id="modalAppoimentGlobal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog col-xs-12 col-sm-4">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Pr&oacute;xima consulta</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="input-group form-group">
+                            <span class="input-group-addon"><i class="md md-event"></i></span>
+                            <div class="fg-line">
+                                <input type="text" class="form-control" placeholder="Pr&oacute;xima consulta en:" [(ngModel)]="appoiment.CantDateType" [ngModelOptions]="{standalone: true}" (keyup.enter)="save()">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="input-group form-group">
+                            <span class="input-group-addon"></span>
+                            <div class="fg-line select">
+                                <select class="form-control" [(ngModel)]="appoiment.DateType" name="DateType">
+                                    <option value="day">D&iacute;as</option>
+                                    <option value="month">Meses</option>
+                                    <option value="year">A&ntilde;os</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" (click)="createNextAppoiment()" data-dismiss="modal">Agendar</button>
+                <button type="button" class="btn btn-link" (click)="close()" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>

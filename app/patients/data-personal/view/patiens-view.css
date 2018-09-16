@@ -1,0 +1,11 @@
+﻿.border-1 {
+    border: solid 1px;
+}
+
+.border-1-top {
+    border-top: solid 1px;
+}
+
+.border-2 {
+    border: solid 2px;
+}

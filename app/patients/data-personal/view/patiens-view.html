@@ -1,0 +1,101 @@
+<spinner-content [isRunning]="isRequesting"></spinner-content>
+<div class="container">
+    <div class="row border-2">
+        <div class="col-sm-12">
+            <div class="col-sm-3"><h5>ESTABLECIMIENTO</h5></div>
+            <div class="col-sm-3"><h5>NOMBRE</h5></div>
+            <div class="col-sm-3"><h5>APELLIDO</h5></div>
+            <div class="col-sm-1"><h5>SEXO</h5></div>
+            <div class="col-sm-1"><h5>EDAD</h5></div>
+            <div class="col-sm-1"><h5>No. H.C</h5></div>
+        </div>
+        <div class="col-sm-12 border-1-top">
+            <div class="col-sm-3">OdontoFy</div>
+            <div class="col-sm-3">{{person.Name}}</div>
+            <div class="col-sm-3">{{person.LastNames}}</div>
+            <div class="col-sm-1">{{person.Sex == true ? 'M': 'F'}}</div>
+            <div class="col-sm-1">{{person.Age > 0 ? person.Age : ''}} <small>{{person.Months > 0 ? person.Months : ''}} {{person.Months == 1 ? 'mes' : ( person.Months > 1 ? 'meses': '')}}</small></div>
+            <div class="col-sm-1">{{patient.Id}}</div>
+        </div>
+    </div>
+
+    <br />
+    <div class="row border-2">
+        <div class="col-sm-12">
+            <div class="col-sm-12"><h5>MOTIVO DE CONSULTA</h5></div>
+        </div>
+        <div class="col-sm-12 border-1-top">
+            <div class="col-sm-12">{{patient.ReasonForConsultation}}</div>
+        </div>
+    </div>
+
+    <br />
+    <div class="row border-2">
+        <div class="col-sm-12">
+            <div class="col-sm-12"><h5>ENFERMEDAD O PROBLEMA ACTUAL</h5></div>
+        </div>
+        <div class="col-sm-12 border-1-top">
+            <div class="col-sm-12">{{patient.CurrentProblem}}</div>
+        </div>
+    </div>
+
+    <br />
+    <div class="row border-2">
+        <div class="col-sm-12">
+            <div class="col-sm-12"><h5>ANTECEDENTES PERSONALES Y FAMILIARES</h5></div>
+        </div>
+        <div class="col-sm-12 border-1-top">
+            <div class="col-sm-3" *ngFor="let obj of patient.personalAndFamilyHistory">
+                <label class="checkbox checkbox-inline m-r-20">
+                    <input type="checkbox" [checked]="obj.Value == 'True'" [(ngModel)]="obj.Value">
+                    <i class="input-helper"></i>
+                    {{obj.Name}}
+                </label>
+            </div>
+        </div>
+        <div class="col-sm-12 border-1-top">
+            <div class="col-sm-12">
+                {{patient.NotePersonalAndFamilyRecord}}
+            </div>
+        </div>
+    </div>
+
+    <br />
+    <div class="row border-2">
+        <div class="col-sm-12">
+            <div class="col-sm-12"><h5>SIGNOS VITALES</h5></div>
+        </div>
+        <div class="col-sm-12 border-1-top">
+            <div class="col-sm-3" *ngFor="let obj of patient.vitalSigns">
+                <div class="input-group form-group">
+                    <div class="fg-line">
+                        {{obj.Name}}: {{obj.Value}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br />
+    <div class="row border-2">
+        <div class="col-sm-12">
+            <div class="col-sm-12"><h5>EXAMEN DEL SISTEMA ESTOMATOGN&Aacute;TICO</h5></div>
+        </div>
+        <div class="col-sm-12 border-1-top">
+            <div class="col-sm-3" *ngFor="let obj of patient.stomatognathicSystem">
+                <label class="checkbox checkbox-inline m-r-20">
+                    <input type="checkbox" [checked]="obj.Value == 'True'" [(ngModel)]="obj.Value">
+                    <i class="input-helper"></i>
+                    {{obj.Name}}
+                </label>
+            </div>
+        </div>
+        <div class="col-sm-12 border-1-top">
+            <div class="input-group form-group">
+                <div class="fg-line">
+                    {{patient.NoteReviewSystemStomatognathic}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

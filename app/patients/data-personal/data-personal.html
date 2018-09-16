@@ -1,0 +1,93 @@
+<spinner-content [isRunning]="isRequesting"></spinner-content>
+<div class="container" [hidden]="isRequesting">
+    <div class="card">
+        <div class="card-header">
+            <h2>{{title}}: Historias cl&iacute;nicas<small>Datos personales y detalles cl&iacute;nicos</small></h2>
+
+            <ul class="actions" data-toggle="tooltip" data-placement="left" title="Agregar {{title}}">
+                <li>
+                    <a [routerLink]="['/patiens', -1]">
+                        <i class="md md-add"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="card-padding card-header">
+            <div class="row">
+
+                <div class="col-sm-6">
+                    <div class="input-group form-group">
+                        <span class="input-group-addon"><i class="md md-search"></i></span>
+                        <div class="dtp-container dropdown fg-line">
+                            <input id="query" type='text' class="form-control" placeholder="Nombre o DNI" (keyup.enter)="searchPatients()">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-4">
+                    <div class="input-group form-group">
+                        <span class="input-group-addon"><i class="md md-school"></i></span>
+                        <div class="fg-line select">
+                            <select class="form-control" [(ngModel)]="clinicWorker" name="clinicWorker" (change)="selectClinicWorker($event.target.value)">
+                                <option value="-1">Todas tus cl&iacute;nicas</option>
+                                <option *ngFor="let opt of clinicsWorker" [value]="opt.Id">{{opt.Name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-2">
+                    <div class="input-group form-group">
+                        <button class="btn btn-info" (click)="searchPatients()"><i class="md md-search"></i>Buscar</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="text-center" [hidden]="response.Total > 0">
+            <i class="md md-settings-ethernet" style="font-size: 100px;"></i>
+            <div>No hay elementos para mostrar</div>
+        </div>
+
+        <div class="table-responsive" [hidden]="!(response.Total > 0)">
+            <table class="table table-striped" [mfData]="response.Data" #mf="mfDataTable" [mfRowsOnPage]="10">
+                <thead>
+                    <tr>
+                        <th style="width: 80%">
+                            <mfDefaultSorter by="name">Nombre</mfDefaultSorter>
+                        </th>
+                        <th style="width: 10%" class="hidden-xs">
+                            <mfDefaultSorter by="age">Edad</mfDefaultSorter>
+                        </th>
+                        <th style="width: 10%">
+                            <mfDefaultSorter></mfDefaultSorter>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of mf.data">
+                        <td style="width: 80%"><a [routerLink]="['/patiens-dashboard', item.patient.Id]">{{item.Name}} {{item.LastNames}}<small class="c-red" [hidden]="!item.patient.PatientFromPartner">-de OdontoBy</small></a></td>
+                        <td style="width: 10%" class="hidden-xs">{{item.Age > 0 ? item.Age : ''}} <small>{{item.Months > 0 ? item.Months : ''}} {{item.Months == 1 ? 'mes' : ( item.Months > 1 ? 'meses': '')}} </small></td>
+                        <td style="width: 10%">
+                            <a href="" [routerLink]="['/patiens', item.patient.Id]" class="p-r-20">
+                                <i class="md md-edit"></i>
+                            </a>
+                            <span (click)="delete(item.Id)" style="color:red;cursor: pointer;">
+                                <i class="md md-delete"></i>
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4">
+                            <mfBootstrapPaginator [rowsOnPageSet]="[10,25,50]"></mfBootstrapPaginator>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
